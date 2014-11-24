@@ -80,7 +80,10 @@ class xv11():
     def requestScan(self):
         """ Ask neato for an array of scan reads. """
         self.port.flushInput()
+        self.port.flushOutput()
         self.port.write("getldsscan\n")
+        response = self.readResponseString()
+        return response
 
     def readResponseString(self):
         """ Returns the entire response from neato in one string. """
@@ -103,7 +106,9 @@ class xv11():
     def getScanRanges(self):
         """ Read values of a scan -- call requestScan first! """
         ranges = list()
-        response = self.readResponseString()
+        response = self.requestScan()
+        #response = self.readResponseString()
+        #print("scan " , response)
         for line in response.splitlines():
             vals = line.split(",")
             # vals[[0] angle, vals[1] range, vals[2] intensity, vals[3] error code
@@ -136,9 +141,11 @@ class xv11():
             Call this function only after sending a command. """
         response = self.readResponseString()
         for line in response.splitlines():
+            #print(line)
             vals = line.split(",")
-            if len(vals) >= 2 and vals[0].isalpha() and vals[1].isdigit():
+            if len(vals) >= 2 and vals[0].replace('_', '').isalpha() and vals[1].isdigit():
                 self.state[vals[0]] = int(vals[1])
+                #print(vals[0] , vals[1])
 
     def getMotors(self):
         """ Update values for motors in the self.state dictionary.

@@ -46,20 +46,20 @@ from neato_driver.neato_driver import xv11, BASE_WIDTH, MAX_SPEED
 class NeatoNode:
 
     def __init__(self):
-	""" Start up connection to the Neato Robot. """
-	rospy.init_node('neato')
+        """ Start up connection to the Neato Robot. """
+        rospy.init_node('neato')
 
-	self.port = rospy.get_param('~port', "/dev/ttyUSB0")
-	rospy.loginfo("Using port: %s"%(self.port))
+        self.port = rospy.get_param('~port', "/dev/ttyUSB0")
+        rospy.loginfo("Using port: %s"%(self.port))
 
-	self.robot = xv11(self.port)
+        self.robot = xv11(self.port)
 
-	rospy.Subscriber("cmd_vel", Twist, self.cmdVelCb)
-	self.scanPub = rospy.Publisher('base_scan', LaserScan, queue_size=10)
-	self.odomPub = rospy.Publisher('odom',Odometry, queue_size=10)
-	self.odomBroadcaster = TransformBroadcaster()
-	self.cmd_vel = [0,0]
-	self.old_vel = self.cmd_vel
+        rospy.Subscriber("cmd_vel", Twist, self.cmdVelCb)
+        self.scanPub = rospy.Publisher('base_scan', LaserScan, queue_size=10)
+        self.odomPub = rospy.Publisher('odom',Odometry, queue_size=10)
+        self.odomBroadcaster = TransformBroadcaster()
+
+        self.cmd_vel = [0,0] 
 
     def spin(self):        
         encoders = [0,0]
@@ -81,23 +81,21 @@ class NeatoNode:
     
         # main loop of driver
         r = rospy.Rate(5)
-        #self.robot.requestScan()
+        self.robot.requestScan()
         while not rospy.is_shutdown():
-	    
-	    # get motor encoder values
-            left, right = self.robot.getMotors()
-
-	    # send updated movement commands
-	    if self.cmd_vel != self.old_vel:
-		self.robot.setMotors(self.cmd_vel[0], self.cmd_vel[1], max(abs(self.cmd_vel[0]),abs(self.cmd_vel[1])))
-
-	    # prepare laser scan
+            # prepare laser scan
             scan.header.stamp = rospy.Time.now()    
             #self.robot.requestScan()
             scan.ranges = self.robot.getScanRanges()
-        
+			rospy.loginfo("Using port: %s"%(self.port))
+            # get motor encoder values
+            left, right = self.robot.getMotors()
+
+            # send updated movement commands
+            self.robot.setMotors(self.cmd_vel[0], self.cmd_vel[1], max(abs(self.cmd_vel[0]),abs(self.cmd_vel[1])))
+            
             # ask for the next scan while we finish processing stuff
-            #self.robot.requestScan()
+            self.robot.requestScan()
             
             # now update position information
             dt = (scan.header.stamp - then).to_sec()
