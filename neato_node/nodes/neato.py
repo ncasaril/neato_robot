@@ -81,7 +81,6 @@ class NeatoNode:
     
         # main loop of driver
         r = rospy.Rate(5)
-        #self.robot.requestScan()
         while not rospy.is_shutdown():
 	    
 	    # get motor encoder values
@@ -93,11 +92,9 @@ class NeatoNode:
 
 	    # prepare laser scan
             scan.header.stamp = rospy.Time.now()    
-            #self.robot.requestScan()
+
             scan.ranges = self.robot.getScanRanges()
         
-            # ask for the next scan while we finish processing stuff
-            #self.robot.requestScan()
             
             # now update position information
             dt = (scan.header.stamp - then).to_sec()
