@@ -58,7 +58,7 @@ class NeatoNode:
 	rospy.Subscriber("cmd_vel", Twist, self.cmdVelCb)
 	self.scanPub = rospy.Publisher('base_scan', LaserScan, queue_size=10)
 	self.odomPub = rospy.Publisher('odom',Odometry, queue_size=10)
-	self.buttonPub = rospy.Publisher('soft_button',Bool)
+	self.buttonPub = rospy.Publisher('soft_button',Bool, queue_size=10)
 	self.odomBroadcaster = TransformBroadcaster()
 	self.cmd_vel = [0,0]
 	self.old_vel = self.cmd_vel
