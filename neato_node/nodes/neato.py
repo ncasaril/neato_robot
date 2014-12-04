@@ -36,6 +36,7 @@ import rospy
 from math import sin,cos
 
 from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Bool
 from geometry_msgs.msg import Quaternion
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -57,6 +58,7 @@ class NeatoNode:
 	rospy.Subscriber("cmd_vel", Twist, self.cmdVelCb)
 	self.scanPub = rospy.Publisher('base_scan', LaserScan, queue_size=10)
 	self.odomPub = rospy.Publisher('odom',Odometry, queue_size=10)
+	self.buttonPub = rospy.Publisher('soft_button',Bool)
 	self.odomBroadcaster = TransformBroadcaster()
 	self.cmd_vel = [0,0]
 	self.old_vel = self.cmd_vel
@@ -77,8 +79,10 @@ class NeatoNode:
         scan.angle_increment = 0.017437326
         scan.range_min = 0.020
         scan.range_max = 5.0
-        odom = Odometry(header=rospy.Header(frame_id="odom"), child_frame_id='base_link')
-    
+        
+	odom = Odometry(header=rospy.Header(frame_id="odom"), child_frame_id='base_link')
+
+	softb = Bool(header=rospy.Header(frame_id="soft_button"))
         # main loop of driver
         r = rospy.Rate(5)
         while not rospy.is_shutdown():
@@ -127,11 +131,19 @@ class NeatoNode:
             odom.twist.twist.linear.x = dx/dt
             odom.twist.twist.angular.z = dth/dt
 
+
+	    # sensors
+	    lsb,rsb,lfb,rfb = self.robot.getDigitalSensors()
+	    
+	    # buttons
+	    btn_soft,btn_scr_up,btn_start,btn_back,btn_scr_down = self.robot.getButtons()
+	    softb.data = btn_soft
             # publish everything
             self.odomBroadcaster.sendTransform( (self.x, self.y, 0), (quaternion.x, quaternion.y, quaternion.z, quaternion.w),
                 then, "base_link", "odom" )
             self.scanPub.publish(scan)
             self.odomPub.publish(odom)
+	    self.buttonPub.publish(softb)
 
             # wait, then do it again
             r.sleep()
