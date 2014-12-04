@@ -82,7 +82,9 @@ class NeatoNode:
         
 	odom = Odometry(header=rospy.Header(frame_id="odom"), child_frame_id='base_link')
 
-	softb = Bool(header=rospy.Header(frame_id="soft_button"))
+	softb = Bool()
+	
+	
         # main loop of driver
         r = rospy.Rate(5)
         while not rospy.is_shutdown():
