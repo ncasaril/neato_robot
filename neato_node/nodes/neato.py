@@ -36,7 +36,7 @@ import rospy
 from math import sin,cos
 
 from sensor_msgs.msg import LaserScan
-from neato_node.msg import button
+from neato_node.msg import Button
 from geometry_msgs.msg import Quaternion
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -58,7 +58,7 @@ class NeatoNode:
 	rospy.Subscriber("cmd_vel", Twist, self.cmdVelCb)
 	self.scanPub = rospy.Publisher('base_scan', LaserScan, queue_size=10)
 	self.odomPub = rospy.Publisher('odom',Odometry, queue_size=10)
-	self.buttonPub = rospy.Publisher('soft_button',button, queue_size=100)
+	self.buttonPub = rospy.Publisher('soft_button', Button, queue_size=100)
 	self.odomBroadcaster = TransformBroadcaster()
 	self.cmd_vel = [0,0]
 	self.old_vel = self.cmd_vel
@@ -82,7 +82,7 @@ class NeatoNode:
         
 	odom = Odometry(header=rospy.Header(frame_id="odom"), child_frame_id='base_link')
 
-	softb = button()
+	softb = Button()
 	
 	
         # main loop of driver
