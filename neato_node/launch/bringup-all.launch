@@ -9,5 +9,12 @@
   <include file="$(find neato_2dnav)/launch/move_base.launch" />
 
   <node pkg="gmapping" type="slam_gmapping" name="SLAM" args="scan:=/iL00 map:=/gmapping/map" />
-</launch>
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="KeyboardControl" />
+  
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find neato_node)/urdf/neato.urdf.xacro" />
+  <param name="use_gui" value="False"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  
+  <node name="rviz" type="rviz" pkg="rviz" args="-d $(find neato_node)/XV11.rviz" />
 
+</launch>
