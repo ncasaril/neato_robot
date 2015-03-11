@@ -8,7 +8,7 @@
   </node>
   <include file="$(find neato_2dnav)/launch/move_base.launch" />
 
-  <node pkg="gmapping" type="slam_gmapping" name="SLAM" args="scan:=/iL00 map:=/gmapping/map" />
+  <node pkg="gmapping" type="slam_gmapping" name="SLAM" args="scan:=/base_scan map:=/gmapping/map" />
   <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="KeyboardControl" />
   
   <param name="robot_description" command="$(find xacro)/xacro.py $(find neato_node)/urdf/neato.urdf.xacro" />
