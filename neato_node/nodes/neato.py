@@ -26,7 +26,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-ROS node for Neato XV-11 Robot Vacuum.
+ROS node for Neato robot vacuums.
 """
 
 __author__ = "ferguson@cs.albany.edu (Michael Ferguson)"
@@ -42,7 +42,7 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from tf.broadcaster import TransformBroadcaster
 
-from neato_driver.neato_driver import xv11, BASE_WIDTH, MAX_SPEED
+from neato_driver.neato_driver import Botvac
 
 class NeatoNode:
 
@@ -53,7 +53,7 @@ class NeatoNode:
 	self.port = rospy.get_param('~port', "/dev/ttyUSB0")
 	rospy.loginfo("Using port: %s"%(self.port))
 
-	self.robot = xv11(self.port)
+	self.robot = Botvac(self.port)
 
 	rospy.Subscriber("cmd_vel", Twist, self.cmdVelCb)
 	self.scanPub = rospy.Publisher('base_scan', LaserScan, queue_size=10)
@@ -111,7 +111,7 @@ class NeatoNode:
             encoders = [left, right]
             
             dx = (d_left+d_right)/2
-            dth = (d_right-d_left)/(BASE_WIDTH/1000.0)
+            dth = (d_right-d_left)/(self.robot.base_width/1000.0)
 
             x = cos(dth)*dx
             y = -sin(dth)*dx
@@ -158,11 +158,11 @@ class NeatoNode:
 
     def cmdVelCb(self,req):
         x = req.linear.x * 1000
-        th = req.angular.z * (BASE_WIDTH/2) 
+        th = req.angular.z * (self.robot.base_width/2)
         k = max(abs(x-th),abs(x+th))
         # sending commands higher than max speed will fail
-        if k > MAX_SPEED:
-            x = x*MAX_SPEED/k; th = th*MAX_SPEED/k
+        if k > self.robot.max_speed:
+            x = x*self.robot.max_speed/k; th = th*self.robot.max_speed/k
         self.cmd_vel = [ int(x-th) , int(x+th) ]
 
 if __name__ == "__main__":    
