@@ -15,4 +15,4 @@ You can check this out into your catkin workspace as follows:
 
 ## Changes in this fork
 
- * This fork is used with a Botvac 75 on Ubuntu 14.04. Running a Rapsberry Pi 2 with Ros ARMF with Ubuntu ARFM on the       Neato and all processing done by the workstation pc with ubuntu 14.04
+ * This fork is used with a Botvac 75 on Ubuntu 14.04. Running a Rapsberry Pi 2 with Ros ARM with Ubuntu ARF on the       Neato and all processing done by the workstation pc with ubuntu 14.04
