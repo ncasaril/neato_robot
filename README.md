@@ -17,5 +17,4 @@ You can check this out into your catkin workspace as follows:
 
  * The driver has been update to support a wider range of neato models and firmware versions including the Neato's Botvac line.
  * This ROS node works with Indigo. The required third parameter to rospy.Publisher() has been supplied.
- * This fork is used with a Botvac 75 on Ubuntu. Running  a Rapsberry Pi 2 with Ros ARMF with Ubuntu ARFM on the Neato
-   and all processing done by the workstation pc with ubuntu 14.04
+ * This fork is used with a Botvac 75 on Ubuntu 14.04. Running a Rapsberry Pi 2 with Ros ARMF with Ubuntu ARFM on the       Neato and all processing done by the workstation pc with ubuntu 14.04
