@@ -168,4 +168,3 @@ class NeatoNode:
 if __name__ == "__main__":    
     robot = NeatoNode()
     robot.spin()
-
