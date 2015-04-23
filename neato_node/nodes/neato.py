@@ -106,12 +106,12 @@ class NeatoNode:
             dt = (scan.header.stamp - then).to_sec()
             then = scan.header.stamp
 
-            d_left = (left - encoders[0])/850.0
-            d_right = (right - encoders[1])/850.0
+            d_left = (left - encoders[0])/1000.0
+            d_right = (right - encoders[1])/1000.0
             encoders = [left, right]
             
             dx = (d_left+d_right)/2
-            dth = (d_right-d_left)/(self.robot.base_width/1000.0)
+            dth = (d_right-d_left)/(self.robot.base_width/1000.0)*1.5
 
             x = cos(dth)*dx
             y = -sin(dth)*dx
