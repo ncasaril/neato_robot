@@ -106,8 +106,8 @@ class NeatoNode:
             dt = (scan.header.stamp - then).to_sec()
             then = scan.header.stamp
 
-            d_left = (left - encoders[0])/700.0
-            d_right = (right - encoders[1])/700.0
+            d_left = (left - encoders[0])/850.0
+            d_right = (right - encoders[1])/850.0
             encoders = [left, right]
             
             dx = (d_left+d_right)/2
