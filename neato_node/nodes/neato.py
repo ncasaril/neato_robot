@@ -111,7 +111,7 @@ class NeatoNode:
             encoders = [left, right]
             
             dx = (d_left+d_right)/2
-            dth = (d_right-d_left)/(self.robot.base_width/1000.0)*0.5
+            dth = (d_right-d_left)/(self.robot.base_width/1000.0)*0.9
 
             x = cos(dth)*dx
             y = -sin(dth)*dx
