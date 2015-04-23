@@ -55,7 +55,7 @@ class Botvac():
                       "RFRONTBIT": 0,"BTN_SOFT_KEY": 0,"BTN_SCROLL_UP": 0,"BTN_START": 0,"BTN_BACK": 0,"BTN_SCROLL_DOWN": 0}
         self.stop_state = True
         
-        self.base_width = 250    # millimeters
+        self.base_width = 258    # millimeters
         self.max_speed = 200     # millimeters/second
         self.crtl_z = chr(26)
         # turn things on
