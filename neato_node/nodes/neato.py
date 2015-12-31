@@ -83,7 +83,7 @@ class NeatoNode:
 	odom = Odometry(header=rospy.Header(frame_id="odom"), child_frame_id='base_link')
 
 	softb = Button()
-	
+	cmd_last_reset = rospy.Time.now()
 	
         # main loop of driver
         r = rospy.Rate(5)
@@ -93,8 +93,13 @@ class NeatoNode:
             left, right = self.robot.getMotors()
 
 	    # send updated movement commands
+            if (rospy.Time.now() - cmd_last_reset).to_sec() > 0.75:
+                self.old_vel = [0,0];
+                cmd_last_reset = rospy.Time.now()
+            
 	    if self.cmd_vel != self.old_vel:
 		self.robot.setMotors(self.cmd_vel[0], self.cmd_vel[1], max(abs(self.cmd_vel[0]),abs(self.cmd_vel[1])))
+                self.old_vel=self.cmd_vel
 
 	    # prepare laser scan
             scan.header.stamp = rospy.Time.now()    
@@ -111,7 +116,7 @@ class NeatoNode:
             encoders = [left, right]
             
             dx = (d_left+d_right)/2
-            dth = (d_right-d_left)/(self.robot.base_width/1000.0)*0.9
+            dth = (d_right-d_left)/(self.robot.base_width/1000.0)
 
             x = cos(dth)*dx
             y = -sin(dth)*dx
